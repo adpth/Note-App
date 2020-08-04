@@ -1,0 +1,30 @@
+<resources>
+
+    <string name="app_name">Note App</string>
+    <string name="search_your_note_here">Search your Note here</string>
+    <string name="usr_img">user_image</string>
+    <string name="take_your_note_here">Take your Note here !</string>
+    <string name="sign_in_with_google">Sign in with Google</string>
+    <string name="your_data_is_protected_n_amp_we_don_t_spam"><![CDATA[your data is protected \n & we don’t spam]]></string>
+    <string name="edit_note">Edit Note</string>
+    <string name="delete_note">Delete Note</string>
+    <string name="create_note">Create Note</string>
+    <string name="cancel">Cancel</string>
+    <string name="description">Description</string>
+    <string name="add_title">Add Title</string>
+    <string name="title">Title</string>
+    <string name="time">Time</string>
+    <string name="logout">Logout</string>
+    <string name="Hello">hello\t</string>
+    <string name="account">Account</string>
+    <string name="rate_app">Rate App</string>
+    <string name="update">Update</string>
+    <string name="application">Application</string>
+    <string name="delete_all_data">Delete all data</string>
+    <string name="manage_data">Manage data</string>
+    <string name="back">Back</string>
+    <string name="version_1_0_0">Version : 1.0.0</string>
+    <string name="create_your_own_note_now">Create your own Note now !</string>
+    <string name="profile_bg">profile_bg</string>
+
+</resources>

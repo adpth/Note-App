@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <color name="colorPrimary">#6200EE</color>
+    <color name="colorPrimaryDark">#3700B3</color>
+    <color name="colorAccent">#03DAC5</color>
+
+    <color name="delete_data_color">#51238E</color>
+    <color name="delete_data_color_bg">#D0B5E4</color>
+
+    <color name="update_color">#2D33BF</color>
+    <color name="update_color_bg">#C2BEF2</color>
+
+    <color name="rate_app_color">#2D33BF</color>
+    <color name="rate_app_color_bg">#C2BEF2</color>
+
+    <color name="logout_color">#C9294F</color>
+    <color name="logout_color_bg">#F8D5E3</color>
+
+</resources>
