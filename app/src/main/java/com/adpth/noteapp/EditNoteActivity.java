@@ -26,6 +26,7 @@ public class EditNoteActivity extends AppCompatActivity {
     EditText edit_title,edit_des;
     Button edit_note,delete_note;
     DatabaseReference reference;
+    String Key;
     FirebaseAuth auth;
     FirebaseUser user;
 
@@ -43,7 +44,7 @@ public class EditNoteActivity extends AppCompatActivity {
 
         edit_title.setText(getIntent().getStringExtra("title"));
         edit_des.setText(getIntent().getStringExtra("description"));
-        final String Key = getIntent().getStringExtra("NoteID");
+        Key = getIntent().getStringExtra("NoteID");
 
         auth = FirebaseAuth.getInstance();
         user = auth.getCurrentUser();
@@ -66,7 +67,9 @@ public class EditNoteActivity extends AppCompatActivity {
                             public void onComplete(@NonNull Task<Void> task) {
                                 if (task.isSuccessful()) {
                                     Toast.makeText(EditNoteActivity.this, "Note Edited", Toast.LENGTH_SHORT).show();
-                                    comeout();
+                                    Intent intent = new Intent(EditNoteActivity.this,MainActivity.class);
+                                    overridePendingTransition(android.R.anim.slide_out_right,android.R.anim.slide_in_left);
+                                    startActivity(intent);
                                 }
                                 else
                                 {
@@ -88,14 +91,14 @@ public class EditNoteActivity extends AppCompatActivity {
             public void onClick(View v) {
                 reference = FirebaseDatabase.getInstance().getReference().child(user.getUid()).child("Note"+ Key);
                 reference.removeValue();
-                comeout();
+                comeout(edit_title.getText().toString(),edit_des.getText().toString());
 
             }
         });
 
     }
 
-    private void comeout() {
+    private void comeout(String title,String desc) {
         Intent intent = new Intent(EditNoteActivity.this,MainActivity.class);
         overridePendingTransition(android.R.anim.slide_out_right,android.R.anim.slide_in_left);
         startActivity(intent);

@@ -17,4 +17,9 @@
     <color name="logout_color">#C9294F</color>
     <color name="logout_color_bg">#F8D5E3</color>
 
+    <color name="delete_dialog">#FF5F63</color>
+    <color name="delete_dialog_bg">#FFD5D6</color>
+
+    <color name="ripple">#E9F8FF</color>
+
 </resources>

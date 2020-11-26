@@ -8,6 +8,9 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Handler;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -25,6 +28,7 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
@@ -32,14 +36,14 @@ import java.util.ArrayList;
 public class MainActivity extends AppCompatActivity {
 
     ImageView Username_img,search_btn;
-    FirebaseAuth auth;
+    FirebaseAuth auth;FirebaseUser user;
     TextView Username;
     EditText search;
-    FloatingActionButton fab;
     RecyclerView recyclerView;
     DatabaseReference reference;
     ArrayList<Model> list;
     NoteAdapter adapter;
+    LottieAnimationView empty;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,9 +52,6 @@ public class MainActivity extends AppCompatActivity {
         if (getSupportActionBar() != null) {
             getSupportActionBar().hide();
         }
-
-        //Lottie Animation Initialization
-        final LottieAnimationView empty = findViewById(R.id.empty);
 
         //Going from MainActivity to ProfileActivity
         Username_img = findViewById(R.id.Username_img);
@@ -66,7 +67,7 @@ public class MainActivity extends AppCompatActivity {
         auth = FirebaseAuth.getInstance();
 
         //On Fab button click we will call NoteActivity to create to Note Task
-        fab = findViewById(R.id.add_note);
+        FloatingActionButton fab = findViewById(R.id.add_note);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -88,21 +89,89 @@ public class MainActivity extends AppCompatActivity {
         }
 
         recyclerView = findViewById(R.id.recyclerview);
-        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
-        recyclerView.setLayoutManager(linearLayoutManager);
-        recyclerView.setAdapter(adapter);
-        recyclerView.setHasFixedSize(true);
         list = new ArrayList<>();
 
-        FirebaseAuth auth = FirebaseAuth.getInstance();
-        FirebaseUser user = auth.getCurrentUser();
+        auth = FirebaseAuth.getInstance();
+        user = auth.getCurrentUser();
         if (user!=null){
             reference = FirebaseDatabase.getInstance().getReference().child(user.getUid());
         }
         reference.keepSynced(true);
+
+        empty = findViewById(R.id.empty);
+
+
+        search = findViewById(R.id.search);
+        search_btn = findViewById(R.id.search_btn);
+
+
+    }
+
+    public void searchData(View view) {
+
+        DatabaseReference ref = FirebaseDatabase.getInstance().getReference().child(user.getUid());
+        Query query = ref.orderByChild("title").equalTo(search.getText().toString());
+
+        query.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                list.clear();
+                for (DataSnapshot postSnapshot : dataSnapshot.getChildren()) {
+                    Model model = postSnapshot.getValue(Model.class);
+                    list.add(model);
+
+                }
+                adapter = new NoteAdapter(MainActivity.this, list);
+                recyclerView.setAdapter(adapter);
+                LinearLayoutManager linearLayoutManager = new LinearLayoutManager(MainActivity.this);
+                recyclerView.setLayoutManager(linearLayoutManager);
+                adapter.notifyDataSetChanged();
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+                Toast.makeText(MainActivity.this, databaseError.getMessage(),Toast.LENGTH_SHORT).show();
+            }
+        });
+
+        search.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                if (s.toString().isEmpty()) {
+                    Refresh(1000);
+                }
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
+
+    }
+
+    private void Refresh(int time) {
+        final Handler handler= new Handler();
+
+        final Runnable runnable = new Runnable() {
+            @Override
+            public void run() {
+                showAll();
+            }
+        };
+        handler.postDelayed(runnable,time);
+    }
+
+    public void showAll() {
         reference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                list.clear();
                 for (DataSnapshot dataSnapshot1:dataSnapshot.getChildren())
                 {
                     Model model =dataSnapshot1.getValue(Model.class);
@@ -111,6 +180,8 @@ public class MainActivity extends AppCompatActivity {
                 }
                 adapter = new NoteAdapter(MainActivity.this,list);
                 recyclerView.setAdapter(adapter);
+                LinearLayoutManager linearLayoutManager = new LinearLayoutManager(MainActivity.this);
+                recyclerView.setLayoutManager(linearLayoutManager);
                 adapter.notifyDataSetChanged();
                 if (adapter.getItemCount()==0){
                     recyclerView.setVisibility(View.INVISIBLE);
@@ -123,22 +194,11 @@ public class MainActivity extends AppCompatActivity {
 
             }
         });
-
-        search = findViewById(R.id.search);
-        search_btn = findViewById(R.id.search_btn);
-        search_btn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                String searched = search.getText().toString();
-                SearchData(searched);
-            }
-        });
-
-
     }
 
-    private void SearchData(String searched) {
-        //We will just Toast the Search Input Data of the User
-        Toast.makeText(MainActivity.this,"You are searching "+ searched,Toast.LENGTH_LONG).show();
+    @Override
+    protected void onStart() {
+        super.onStart();
+        showAll();
     }
 }

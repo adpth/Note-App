@@ -9,7 +9,6 @@
     <string name="edit_note">Edit Note</string>
     <string name="delete_note">Delete Note</string>
     <string name="create_note">Create Note</string>
-    <string name="cancel">Cancel</string>
     <string name="description">Description</string>
     <string name="add_title">Add Title</string>
     <string name="title">Title</string>
@@ -26,5 +25,9 @@
     <string name="version_1_0_0">Version : 1.0.0</string>
     <string name="create_your_own_note_now">Create your own Note now !</string>
     <string name="profile_bg">profile_bg</string>
+    <string name="delete_all_notes">Delete All Notes</string>
+    <string name="your_note_will_be_permanently_deleted_and_cannot_recovered_would_you_like_to_continue">Your Note will be permanently deleted and cannot recovered, would you like to continue ?</string>
+    <string name="cancel">Cancel</string>
+    <string name="yes_delete_it">Yes, delete it!</string>
 
 </resources>

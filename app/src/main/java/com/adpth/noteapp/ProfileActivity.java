@@ -1,11 +1,14 @@
 package com.adpth.noteapp;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -51,9 +54,35 @@ public class ProfileActivity extends AppCompatActivity {
         delete_data.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                DatabaseReference reference = FirebaseDatabase.getInstance().getReference().child(user.getUid());
-                reference.removeValue();
-                Toast.makeText(ProfileActivity.this,"Your Notes are deleted",Toast.LENGTH_LONG).show();
+                AlertDialog.Builder builder = new AlertDialog.Builder(ProfileActivity.this,R.style.CustomAlertDialog);
+                ViewGroup viewGroup = findViewById(android.R.id.content);
+                View dialogView = LayoutInflater.from(ProfileActivity.this).inflate(R.layout.delete_dialog, viewGroup, false);
+                builder.setView(dialogView);
+                final AlertDialog dialog = builder.create();
+                dialog.setCancelable(false);
+                dialog.show();
+                TextView delete = dialog.findViewById(R.id.delete);
+                if (delete != null) {
+                    delete.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            DatabaseReference reference = FirebaseDatabase.getInstance().getReference().child(user.getUid());
+                            reference.removeValue();
+                            dialog.dismiss();
+                            Toast.makeText(ProfileActivity.this,"Your Notes are deleted",Toast.LENGTH_LONG).show();
+                        }
+                    });
+                }
+                TextView cancel = dialog.findViewById(R.id.cancel);
+                if (cancel != null) {
+                    cancel.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            dialog.dismiss();
+                        }
+                    });
+                }
+
             }
         });
 

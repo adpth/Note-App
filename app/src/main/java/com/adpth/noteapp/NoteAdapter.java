@@ -66,6 +66,7 @@ public class NoteAdapter extends RecyclerView.Adapter<NoteAdapter.ViewHolder> {
     public static class ViewHolder extends RecyclerView.ViewHolder {
 
         TextView textTitle,textDescp,textTime;
+
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
             textTitle = itemView.findViewById(R.id.title);
