@@ -10,6 +10,8 @@
  
  - Check Note is added or not display "Empty" animation
  
+ - Search Functionality
+ 
  # How to Connect ?
  - Connect your project to firebase
  - Add SHA certificate fingerprints into your firebase
